@@ -10,11 +10,18 @@ use std::os::unix::io::AsRawFd;
 
 fn setup_serial_port(fd: RawFd) -> bool {
     let mut qlen = 0 as i32;
+    let mut stat = 0 as u64;
 
     unsafe {
       //ioctl::ioctl(fd, qlen);
       ioctl::ap_get_qlimit_max(fd, &mut qlen);
       println!("done, qlen={}", qlen);
+
+      ioctl::ap_get_drops(fd, &mut stat);
+      println!("done, drops={}", stat);
+
+      ioctl::ap_get_truncates(fd, &mut stat);
+      println!("done, truncates={}", stat);
     }
 
     true

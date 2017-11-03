@@ -5,4 +5,4 @@ authors = ["jhoward"]
 
 [dependencies]
 
-ioctl-rs = {git = "file:///home/jhoward/git/ioctl-rs", rev = "8dd7251"}
+ioctl-rs = {git = "file:///home/jhoward/git/ioctl-rs", rev = "40f6ef5143"}
