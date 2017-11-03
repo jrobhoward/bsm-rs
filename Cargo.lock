@@ -1,0 +1,23 @@
+[root]
+name = "bsm-rs"
+version = "0.1.0"
+dependencies = [
+ "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=8dd7251)",
+]
+
+[[package]]
+name = "ioctl-rs"
+version = "0.1.5"
+source = "git+file:///home/jhoward/git/ioctl-rs?rev=8dd7251#8dd7251d8b18f3a6f67809865e9474d9893d8f66"
+dependencies = [
+ "libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "libc"
+version = "0.2.33"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=8dd7251)" = "<none>"
+"checksum libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "5ba3df4dcb460b9dfbd070d41c94c19209620c191b0340b929ce748a2bcd42d2"

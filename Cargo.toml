@@ -1,0 +1,8 @@
+[package]
+name = "bsm-rs"
+version = "0.1.0"
+authors = ["jhoward"]
+
+[dependencies]
+
+ioctl-rs = {git = "file:///home/jhoward/git/ioctl-rs", rev = "8dd7251"}
