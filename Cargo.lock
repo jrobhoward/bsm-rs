@@ -2,13 +2,13 @@
 name = "bsm-rs"
 version = "0.1.0"
 dependencies = [
- "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=40f6ef5143)",
+ "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=JRH)",
 ]
 
 [[package]]
 name = "ioctl-rs"
 version = "0.1.5"
-source = "git+file:///home/jhoward/git/ioctl-rs?rev=40f6ef5143#40f6ef51437f8d96b923d4cb850cb489b73dc357"
+source = "git+file:///home/jhoward/git/ioctl-rs?rev=JRH#96f7a34d6303aefb7ffce4968b154728b88e2826"
 dependencies = [
  "libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -19,5 +19,5 @@ version = "0.2.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
-"checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=40f6ef5143)" = "<none>"
+"checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=JRH)" = "<none>"
 "checksum libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "5ba3df4dcb460b9dfbd070d41c94c19209620c191b0340b929ce748a2bcd42d2"

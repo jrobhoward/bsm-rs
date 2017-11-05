@@ -3,6 +3,7 @@
 * ```cargo build --release```
 * ```cargo test```
 * ```cargo update```
+* ```cargo update -p ioctl-rs```
 * ```cargo run --example main```
 * ```rustfmt src/lib.rs```
 
