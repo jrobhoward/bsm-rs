@@ -1,0 +1,7 @@
+[package]
+name = "rusty_pipe"
+version = "0.1.0"
+authors = ["jhoward"]
+
+[dependencies]
+ioctl-rs = {git = "file:///home/jhoward/git/ioctl-rs", rev = "e310562405ab2ff019eefa90a752f82b33ec7df2"}
