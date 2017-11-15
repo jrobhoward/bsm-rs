@@ -2,13 +2,13 @@
 name = "rusty_pipe"
 version = "0.1.0"
 dependencies = [
- "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=e310562405ab2ff019eefa90a752f82b33ec7df2)",
+ "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=a720b8235b1a3c65c23765bbbb56ed4e95826340)",
 ]
 
 [[package]]
 name = "ioctl-rs"
 version = "0.1.5"
-source = "git+file:///home/jhoward/git/ioctl-rs?rev=e310562405ab2ff019eefa90a752f82b33ec7df2#e310562405ab2ff019eefa90a752f82b33ec7df2"
+source = "git+file:///home/jhoward/git/ioctl-rs?rev=a720b8235b1a3c65c23765bbbb56ed4e95826340#a720b8235b1a3c65c23765bbbb56ed4e95826340"
 dependencies = [
  "libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -19,5 +19,5 @@ version = "0.2.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
-"checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=e310562405ab2ff019eefa90a752f82b33ec7df2)" = "<none>"
+"checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=a720b8235b1a3c65c23765bbbb56ed4e95826340)" = "<none>"
 "checksum libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "5ba3df4dcb460b9dfbd070d41c94c19209620c191b0340b929ce748a2bcd42d2"
