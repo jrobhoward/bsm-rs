@@ -4,4 +4,5 @@ version = "0.1.0"
 authors = ["jhoward"]
 
 [dependencies]
+byteorder = "1.1.0"
 ioctl-rs = {git = "file:///home/jhoward/git/ioctl-rs", rev = "a720b8235b1a3c65c23765bbbb56ed4e95826340"}

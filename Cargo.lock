@@ -2,8 +2,14 @@
 name = "rusty_pipe"
 version = "0.1.0"
 dependencies = [
+ "byteorder 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=a720b8235b1a3c65c23765bbbb56ed4e95826340)",
 ]
+
+[[package]]
+name = "byteorder"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "ioctl-rs"
@@ -19,5 +25,6 @@ version = "0.2.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
+"checksum byteorder 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ff81738b726f5d099632ceaffe7fb65b90212e8dce59d518729e7e8634032d3d"
 "checksum ioctl-rs 0.1.5 (git+file:///home/jhoward/git/ioctl-rs?rev=a720b8235b1a3c65c23765bbbb56ed4e95826340)" = "<none>"
 "checksum libc 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "5ba3df4dcb460b9dfbd070d41c94c19209620c191b0340b929ce748a2bcd42d2"
