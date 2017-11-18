@@ -1,12 +1,13 @@
 extern crate ioctl_rs as ioctl;
 extern crate byteorder;
 
-use byteorder::{ByteOrder, LittleEndian, BigEndian, ReadBytesExt};
+use byteorder::{BigEndian, ByteOrder, LittleEndian, ReadBytesExt};
 use std::fs::File;
 use std::io::prelude::*;
 use std::os::unix::io::AsRawFd;
 use std::os::unix::io::RawFd;
 use std::path::Path;
+use std::str;
 
 
 fn setup_serial_port(fd: RawFd) -> bool {
@@ -73,7 +74,7 @@ fn main() {
 
     setup_serial_port(file.as_raw_fd());
 
-    for _ in 0..5 {
+    for _ in 0..1 {
         let mut record_type: [u8; 1] = [0; 1];
         let result = file.read(&mut record_type);
         println!("Record Received type={}", record_type[0]);
@@ -86,14 +87,38 @@ fn main() {
         let result = file.read(&mut record_buffer[0..record_remaining]);
         println!("Read record numBytes={:?}", result);
 
-        println!("Four: {} {} {} {}", record_buffer[0], record_buffer[1], record_buffer[2], record_buffer[3]);
+        let token_sec = BigEndian::read_u64(&record_buffer[1..9]);
+        println!("Read record sec={:?}", token_sec);
 
-        let token_size = BigEndian::read_u32(&record_buffer[0..5]);
-        println!("Token Received size={}", token_size);
+        let token_ms = BigEndian::read_u64(&record_buffer[9..17]);
+        println!("Read record ms={:?}", token_ms);
 
-        for i in 0..record_remaining {
-        println!("  x[{}] = {}",i, record_buffer[i]);
+        let token_flen = BigEndian::read_u16(&record_buffer[41..43]);
+        println!("Read record flen={:?}", token_flen);
+
+
+        let pathend = (43 + token_flen) as usize;
+
+        for i in 43..pathend {
+            println!("  x[{}] = {}", i, record_buffer[i]);
         }
+
+        let p = str::from_utf8(&record_buffer[43..pathend]).unwrap();
+        println!("Read path={:?}", p);
+
+        //let p = String::from_utf8_lossy((&record_buffer[43..pathend]));
+        //println!("Read path={:?}", p);
+
+        //JRH: index 42 has the length..
+
+        //println!("Four: {} {} {} {}", record_buffer[0], record_buffer[1], record_buffer[2], record_buffer[3]);
+
+        //let token_size = BigEndian::read_u32(&record_buffer[0..5]);
+        //println!("Token Received size={}", token_size);
+
+        //for i in 0..record_remaining {
+        //println!("  x[{}] = {}",i, record_buffer[i]);
+        //}
 
     }
 
