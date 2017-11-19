@@ -106,8 +106,17 @@ fn main() {
                 //println!("  x[{}] = {}", i, record_buffer[i]);
                 //}
 
-                let p = str::from_utf8(&record_buffer[43..pathend]).unwrap();
-                //println!("Read path={:?}", p);
+                let p = match str::from_utf8(&record_buffer[43..pathend]) {
+                    Ok(x) => x,
+                    Err(e) => {
+                        println!("  err={}", e);
+                        //unsafe {
+                            //str::from_utf8_unchecked(&record_buffer[43..pathend])
+                        //}
+                        ""
+                    },
+                };
+                println!("Read path={:?}", p);
             } else {
                 println!("Unknown record type");
             }
