@@ -74,37 +74,47 @@ fn main() {
 
     setup_serial_port(file.as_raw_fd());
 
-    for _ in 0..1 {
+    let mut record_buffer: [u8; 32767] = [0; 32767];
+
+    for _ in 0..200000 {
         let mut record_type: [u8; 1] = [0; 1];
         let result = file.read(&mut record_type);
-        println!("Record Received type={}", record_type[0]);
+        //println!("Record Received type={}", record_type[0]);
 
-        let record_size = file.read_u32::<BigEndian>().unwrap();
-        println!("Record Received size={}", record_size);
-        let record_remaining = (record_size - 5) as usize;
+        if record_type[0] == AUT_HEADER32 { // ??
+            let record_size = file.read_u32::<BigEndian>().unwrap();
+            //println!("Record Received size={}", record_size);
+            let record_remaining = (record_size - 5) as usize;
 
-        let mut record_buffer: [u8; 32767] = [0; 32767];
-        let result = file.read(&mut record_buffer[0..record_remaining]);
-        println!("Read record numBytes={:?}", result);
+            let result = file.read(&mut record_buffer[0..record_remaining]);
+            //println!("Read record numBytes={:?}", result);
 
-        let token_sec = BigEndian::read_u64(&record_buffer[1..9]);
-        println!("Read record sec={:?}", token_sec);
+            if record_buffer[0] == 11 { // ??
+                let token_sec = BigEndian::read_u64(&record_buffer[1..9]);
+                //println!("Read record sec={:?}", token_sec);
 
-        let token_ms = BigEndian::read_u64(&record_buffer[9..17]);
-        println!("Read record ms={:?}", token_ms);
+                let token_ms = BigEndian::read_u64(&record_buffer[9..17]);
+                //println!("Read record ms={:?}", token_ms);
 
-        let token_flen = BigEndian::read_u16(&record_buffer[41..43]);
-        println!("Read record flen={:?}", token_flen);
+                let token_flen = BigEndian::read_u16(&record_buffer[41..43]);
+                //println!("Read record flen={:?}", token_flen);
 
 
-        let pathend = (43 + token_flen) as usize;
+                let pathend = (43 + token_flen) as usize;
 
-        for i in 43..pathend {
-            println!("  x[{}] = {}", i, record_buffer[i]);
+                //for i in 43..pathend {
+                //println!("  x[{}] = {}", i, record_buffer[i]);
+                //}
+
+                let p = str::from_utf8(&record_buffer[43..pathend]).unwrap();
+                //println!("Read path={:?}", p);
+            } else {
+                println!("Unknown record type");
+            }
+        } else {
+            println!("Unknown header={}", record_type[0]);
         }
 
-        let p = str::from_utf8(&record_buffer[43..pathend]).unwrap();
-        println!("Read path={:?}", p);
 
         //let p = String::from_utf8_lossy((&record_buffer[43..pathend]));
         //println!("Read path={:?}", p);
@@ -121,5 +131,8 @@ fn main() {
         //}
 
     }
+
+
+    setup_serial_port(file.as_raw_fd());
 
 }
