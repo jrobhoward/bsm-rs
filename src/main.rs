@@ -1,13 +1,15 @@
 extern crate ioctl_rs as ioctl;
 extern crate byteorder;
 
-use byteorder::{BigEndian, ByteOrder, LittleEndian, ReadBytesExt};
+use byteorder::{BigEndian, ByteOrder, ReadBytesExt};
 use std::fs::File;
 use std::io::prelude::*;
 use std::os::unix::io::AsRawFd;
 use std::os::unix::io::RawFd;
 use std::path::Path;
 use std::str;
+use std::sync::{Arc, Condvar, Mutex};
+use std::thread;
 
 
 fn setup_serial_port(fd: RawFd) -> bool {
@@ -74,14 +76,60 @@ fn main() {
 
     setup_serial_port(file.as_raw_fd());
 
+    //JRH: TODO - need to convert this
     let mut record_buffer: [u8; 32767] = [0; 32767];
+    let pair = Arc::new((Mutex::new(false), Condvar::new()));
+    let pair2 = pair.clone();
 
-    for _ in 0..200000 {
+    thread::spawn(move || {
+        let &(ref lock, ref cvar) = &*pair2;
+        let mut started = lock.lock().unwrap();
+        *started = true;
+        // We notify the condvar that the value has changed.
+        cvar.notify_one();
+    });
+
+    // Wait for the thread to start up.
+    let &(ref lock, ref cvar) = &*pair;
+    let mut started = lock.lock().unwrap();
+    while !*started {
+        started = cvar.wait(started).unwrap();
+    }
+
+    //
+    // 1.) each thread holds its own record_buffer
+    //    ** 4 threads / 4 buffers
+    //    ** worker thread responsible for zeroing it out
+    //    ** use a condition variable to indicate it's populated
+    //
+    //    ** each worker gets a cloned channel to produce..
+    //
+
+    // Make a vector to hold the workers which are spawned.
+    let mut workers = vec![];
+
+    for i in 0..1 {
+        // Spin up another thread
+        workers.push(thread::spawn(move || {
+            println!("this is thread number {}", i);
+        }));
+    }
+
+
+
+    for worker in workers {
+        // Wait for the thread to finish. Returns a result.
+        let _ = worker.join();
+    }
+
+
+    for _ in 0..20000 {
         let mut record_type: [u8; 1] = [0; 1];
         let result = file.read(&mut record_type);
         //println!("Record Received type={}", record_type[0]);
 
-        if record_type[0] == AUT_HEADER32 { // ??
+        if record_type[0] == AUT_HEADER32 {
+            // ??
             let record_size = file.read_u32::<BigEndian>().unwrap();
             //println!("Record Received size={}", record_size);
             let record_remaining = (record_size - 5) as usize;
@@ -89,7 +137,8 @@ fn main() {
             let result = file.read(&mut record_buffer[0..record_remaining]);
             //println!("Read record numBytes={:?}", result);
 
-            if record_buffer[0] == 11 { // ??
+            if record_buffer[0] == 11 {
+                // ??
                 let token_sec = BigEndian::read_u64(&record_buffer[1..9]);
                 //println!("Read record sec={:?}", token_sec);
 
@@ -111,10 +160,10 @@ fn main() {
                     Err(e) => {
                         println!("  err={}", e);
                         //unsafe {
-                            //str::from_utf8_unchecked(&record_buffer[43..pathend])
+                        //str::from_utf8_unchecked(&record_buffer[43..pathend])
                         //}
                         ""
-                    },
+                    }
                 };
                 println!("Read path={:?}", p);
             } else {
@@ -123,21 +172,6 @@ fn main() {
         } else {
             println!("Unknown header={}", record_type[0]);
         }
-
-
-        //let p = String::from_utf8_lossy((&record_buffer[43..pathend]));
-        //println!("Read path={:?}", p);
-
-        //JRH: index 42 has the length..
-
-        //println!("Four: {} {} {} {}", record_buffer[0], record_buffer[1], record_buffer[2], record_buffer[3]);
-
-        //let token_size = BigEndian::read_u32(&record_buffer[0..5]);
-        //println!("Token Received size={}", token_size);
-
-        //for i in 0..record_remaining {
-        //println!("  x[{}] = {}",i, record_buffer[i]);
-        //}
 
     }
 
