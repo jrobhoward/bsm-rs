@@ -13,6 +13,7 @@
 * Safe, Concurrent Systems Language
 
 * Cargo: package management
+    - similar to gradle
     - source code
     - dependencies
 
